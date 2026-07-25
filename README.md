@@ -65,25 +65,34 @@ npm run dev
 
 ## 四、部署到 Vercel
 
+> 本项目已 `git init` 并提交在 `main` 分支（1 个 commit，库内无 node_modules/.next）。
+
+### 1. 前置（GitHub 侧，一次性）
+- **加 SSH 公钥到 GitHub**：Settings → SSH and GPG keys → New SSH key，粘贴本机 `~/.ssh/id_ed25519.pub`（本机默认 key 注释为 `csm-voice-io-2026-06-17`）。没加的话 `git push` 会 `Permission denied (publickey)`。
+- **建空仓库 `woodfreeman/foodmap`**：GitHub → New repository，仓库名 `foodmap`、保持 **空**（别勾 Initialize with README），否则和本地历史冲突。
+
+### 2. 推送代码
 ```bash
-# 1. 提交并推到 GitHub（用你自己的仓库，例如 woodfreeman/foodmap）
-git init
-git add .
-git commit -m "foodmap MVP"
-git branch -M main
-git remote add origin git@github.com:你的名/foodmap.git
+git remote add origin git@github.com:woodfreeman/foodmap.git
 git push -u origin main
 ```
 
-2. 打开 https://vercel.com/ → **Add New → Project** → 导入上面那个 GitHub 仓库
-3. Framework 选 **Next.js**（Vercel 通常自动识别）
-4. **Environment Variables** 里把 `.env.local` 里四个变量原样填一遍（Vercel 构建时需要）
-5. 点 **Deploy** → 等几分钟 → 拿到 `https://foodmap-xxxx.vercel.app`
+### 3. 导入 Vercel（二选一）
+**一键导入**（push 成功后直接点，已预填 4 个环境变量名）：
+https://vercel.com/new/clone?repository-url=https://github.com/woodfreeman/foodmap&env=NEXT_PUBLIC_AMAP_KEY,NEXT_PUBLIC_AMAP_SECURITY_CODE,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY&project-name=foodmap&framework=nextjs
+> **值**需在 Vercel 项目 Settings → Environment Variables 里填（值同 `.env.local`，模板见 `vercel-env.example`）。
+
+**手动导入**（等价）：
+1. https://vercel.com/ → **Add New → Project** → 导入 `woodfreeman/foodmap`
+2. Framework 选 **Next.js**（`vercel.json` 已声明，自动识别）
+3. **Environment Variables** 把 `vercel-env.example` 里 4 个变量原样填一遍
+4. 点 **Deploy** → 拿到 `https://foodmap-xxxx.vercel.app`
 
 ### 关键提醒
-- **环境变量要在 Vercel 项目设置里也填一份**，只填本地 `.env.local` 不够，Vercel 构建/运行读不到
+- **环境变量要在 Vercel 也填一份**，只填本地 `.env.local` 不够，Vercel 构建/运行读不到
 - **「定位」功能需要 HTTPS**：Vercel 域名自带 HTTPS，没问题；本地 `localhost` 也允许
 - 高德 JS API 的 key 若设了「域名白名单」，记得把 `*.vercel.app` 加进去（或先不设白名单测通）
+- 部署区域设为 **香港 (hkg1)**（`vercel.json` 已指定），离海口更近
 
 ---
 
@@ -97,6 +106,8 @@ foodmap/
 ├── tailwind.config.ts
 ├── postcss.config.mjs
 ├── .env.example
+├── vercel.json
+├── vercel-env.example
 ├── README.md
 ├── supabase/
 │   ├── schema.sql        # 建表 + RLS + Storage policy（去 SQL Editor 执行）

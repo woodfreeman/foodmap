@@ -1,0 +1,15 @@
+# ============================================================
+# Vercel 环境变量模板
+# 部署前，把这 4 个变量原样填到 Vercel 项目：
+#   Settings → Environment Variables
+# 变量名必须完全一致（含 NEXT_PUBLIC_ 前缀），值填你自己的。
+# 本地 .env.local 与这里各填一份，Vercel 构建/运行才读得到。
+# ============================================================
+
+# 高德地图 JS API 2.0 —— https://lbs.amap.com/ 申请「Web端(JS API)」
+NEXT_PUBLIC_AMAP_KEY=
+NEXT_PUBLIC_AMAP_SECURITY_CODE=
+
+# Supabase —— 项目后台 Settings → API 获取
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
