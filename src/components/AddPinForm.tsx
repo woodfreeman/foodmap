@@ -33,7 +33,9 @@ export default function AddPinForm({
     try {
       let imageUrl: string | null = null;
       if (file) {
-        const path = `public/${Date.now()}-${file.name}`;
+        // 仅用 ASCII 文件名：Supabase storage 的 key 不允许中文等非 ASCII 字符，否则报 Invalid key
+        const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
         const { error: upErr } = await supabase.storage
           .from("food-images")
           .upload(path, file);
